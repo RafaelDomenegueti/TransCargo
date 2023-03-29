@@ -1,0 +1,39 @@
+{
+  "name": "transcargo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "scripts": {
+    "start:dev": "nodemon src/app.js",
+    "db:migration:generate": "prisma migrate dev --name init",
+    "db:migration:deploy": "prisma migrate deploy",
+    "db:seed": "ts-node prisma/seed.ts",
+    "db:docker:up": "docker-compose up",
+    "db:docker:down": "docker-compose down"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RafaelDomenegueti/TransCargo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RafaelDomenegueti/TransCargo/issues"
+  },
+  "homepage": "https://github.com/RafaelDomenegueti/TransCargo#readme",
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "nodemon": "^2.0.22",
+    "prisma": "^4.12.0",
+    "typescript": "*"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.12.0",
+    "express": "^4.18.2"
+  }
+}
