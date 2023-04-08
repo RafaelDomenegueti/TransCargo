@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "start:dev": "nodemon src/app.js",
+    "start:dev": "nodemon src/server.ts",
     "db:migration:generate": "prisma migrate dev --name init",
     "db:migration:deploy": "prisma migrate deploy",
     "db:seed": "ts-node prisma/seed.ts",
@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/RafaelDomenegueti/TransCargo#readme",
   "devDependencies": {
+    "@types/express": "^4.17.17",
     "@types/node": "^18.15.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
@@ -30,10 +31,21 @@
     "eslint-plugin-prettier": "^4.0.0",
     "nodemon": "^2.0.22",
     "prisma": "^4.12.0",
+    "ts-node": "^10.9.1",
     "typescript": "*"
   },
   "dependencies": {
     "@prisma/client": "^4.12.0",
-    "express": "^4.18.2"
+    "@types/bcrypt": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.1",
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^9.0.0",
+    "morgan": "^1.10.0",
+    "reflect-metadata": "^0.1.13",
+    "zod": "^3.21.4"
   }
 }
