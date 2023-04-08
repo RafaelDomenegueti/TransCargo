@@ -6,6 +6,7 @@ import { ENV } from "../../utils/env";
 import { prisma } from "../../prisma/client";
 import { AppError } from "../../errors/AppError";
 import { registerDto } from "./dto/register.dto ";
+import { accessProfileEnum } from "../../enumerators/accessProfile";
 
 const login = async (dto: z.infer<typeof loginDto>) => {
   const { email, password } = dto;
@@ -33,10 +34,10 @@ const login = async (dto: z.infer<typeof loginDto>) => {
   };
 };
 
-const register = async (dto: z.infer<typeof registerDto>) => {
+const register = async (dto: z.infer<typeof registerDto>, user: string) => {
   const { access_profile_id, email, name, password } = dto;
 
-  const [userByEmail, accessProfile] = await Promise.all([
+  const [userByEmail, accessProfile, creatorUser] = await Promise.all([
     prisma.users.findFirst({
       where: {
         email,
@@ -47,7 +48,23 @@ const register = async (dto: z.infer<typeof registerDto>) => {
         id: access_profile_id,
       },
     }),
+    prisma.users.findFirst({
+      where: {
+        email: user,
+      },
+      include: {
+        accessProfile: {
+          select: {
+            name: true,
+          }
+        }
+      }
+    })
   ]);
+
+  if (creatorUser.accessProfile.name !== accessProfileEnum.ADMINISTRADOR) {
+    throw AppError("User not have permission")
+  }
 
   if (userByEmail) {
     throw AppError("Email has already been used");
@@ -59,7 +76,7 @@ const register = async (dto: z.infer<typeof registerDto>) => {
 
   const encryptedPassword = await bcrypt.hash(password, 10);
 
-  await prisma.users.create({
+  const userCreated = await prisma.users.create({
     data: {
       email,
       name,
@@ -68,10 +85,10 @@ const register = async (dto: z.infer<typeof registerDto>) => {
     }
   })
 
-  const token = jwt.sign({ email: email }, ENV.PRIVATE_KEY, { expiresIn: '24h' });
+  delete userCreated.password
 
   return {
-    token,
+    ...userCreated,
   };
 };
 

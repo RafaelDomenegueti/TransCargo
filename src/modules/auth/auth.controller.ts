@@ -13,7 +13,7 @@ const login = async (req: Express.Request, res: Express.Response) => {
 
 const register = async (req: Express.Request, res: Express.Response) => {
   try {
-    const response = await AuthService.register(req.body);
+    const response = await AuthService.register(req.body, res.locals.user);
 
     res.json(response);
   } catch (error) {
