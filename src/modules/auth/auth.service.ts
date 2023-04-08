@@ -34,10 +34,10 @@ const login = async (dto: z.infer<typeof loginDto>) => {
   };
 };
 
-const register = async (dto: z.infer<typeof registerDto>, user: string) => {
+const register = async (dto: z.infer<typeof registerDto>) => {
   const { access_profile_id, email, name, password } = dto;
 
-  const [userByEmail, accessProfile, creatorUser] = await Promise.all([
+  const [userByEmail, accessProfile] = await Promise.all([
     prisma.users.findFirst({
       where: {
         email,
@@ -48,23 +48,7 @@ const register = async (dto: z.infer<typeof registerDto>, user: string) => {
         id: access_profile_id,
       },
     }),
-    prisma.users.findFirst({
-      where: {
-        email: user,
-      },
-      include: {
-        accessProfile: {
-          select: {
-            name: true,
-          }
-        }
-      }
-    })
   ]);
-
-  if (creatorUser.accessProfile.name !== accessProfileEnum.ADMINISTRADOR) {
-    throw AppError("User not have permission")
-  }
 
   if (userByEmail) {
     throw AppError("Email has already been used");

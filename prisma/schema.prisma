@@ -23,16 +23,22 @@ model Users {
   password          String
   access_profile_id String
   accessProfile     AccessProfile @relation(fields: [access_profile_id], references: [id])
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+  deleted_at        DateTime?
 
   @@map("tb_users")
 }
 
 model Truck {
-  id            String   @id @default(uuid())
-  mocel         String
+  id            String    @id @default(uuid())
+  model         String
   license_plate String
-  year          DateTime
+  year          String
   qtd_axle      Int
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  deleted_at    DateTime?
 
   routes Routes[]
 
@@ -67,6 +73,9 @@ model Loads {
   street       String
   number       String
   details      String?
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  deleted_at   DateTime?
 
   routes Routes[]
 
@@ -74,12 +83,15 @@ model Loads {
 }
 
 model Routes {
-  id       String @id @default(uuid())
-  truck_id String
-  truck    Truck  @relation(fields: [truck_id], references: [id])
-  load_id  String
-  load     Loads  @relation(fields: [load_id], references: [id])
-  estimate Float
+  id         String    @id @default(uuid())
+  truck_id   String
+  truck      Truck     @relation(fields: [truck_id], references: [id])
+  load_id    String
+  load       Loads     @relation(fields: [load_id], references: [id])
+  estimate   Float
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
 
   pitstop     Pitstop[]
   statusRoute StatusRoute[]
@@ -88,9 +100,9 @@ model Routes {
 }
 
 model Pitstop {
-  id           String   @id @default(uuid())
+  id           String    @id @default(uuid())
   route_id     String
-  routes       Routes   @relation(fields: [route_id], references: [id])
+  routes       Routes    @relation(fields: [route_id], references: [id])
   city         String
   zipcode      String
   state        String
@@ -99,6 +111,9 @@ model Pitstop {
   number       String
   details      String?
   time         DateTime
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  deleted_at   DateTime?
 
   @@map("tb_pitstops")
 }
@@ -115,6 +130,8 @@ model StatusRoute {
   number       String
   details      String?
   time         DateTime
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
 
   @@map("tb_status_routes")
 }
