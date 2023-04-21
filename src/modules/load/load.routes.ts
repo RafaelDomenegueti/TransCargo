@@ -10,12 +10,12 @@ const router = Router();
 
 router.get(
   "/:id",
-  accessValidator([accessProfileEnum.ADMINISTRADOR]),
+  accessValidator([accessProfileEnum.ADMINISTRADOR, accessProfileEnum.MOTORISTA]),
   LoadController.getLoad
 );
 router.get(
   "/",
-  accessValidator([accessProfileEnum.ADMINISTRADOR]),
+  accessValidator([accessProfileEnum.ADMINISTRADOR, accessProfileEnum.MOTORISTA]),
   LoadController.getAllLoad
 );
 router.post(

@@ -10,12 +10,12 @@ const router = Router();
 
 router.get(
   "/:id",
-  accessValidator([accessProfileEnum.ADMINISTRADOR]),
+  accessValidator([accessProfileEnum.ADMINISTRADOR, accessProfileEnum.MOTORISTA]),
   RouteController.getRoute
 );
 router.get(
   "/",
-  accessValidator([accessProfileEnum.ADMINISTRADOR]),
+  accessValidator([accessProfileEnum.ADMINISTRADOR, accessProfileEnum.MOTORISTA]),
   RouteController.getAllRoute
 );
 router.post(
@@ -23,6 +23,12 @@ router.post(
   accessValidator([accessProfileEnum.ADMINISTRADOR]),
   validate(createRouteDto),
   RouteController.createRoute
+);
+router.post(
+  "/update-status",
+  accessValidator([accessProfileEnum.ADMINISTRADOR, accessProfileEnum.MOTORISTA]),
+  validate(createRouteDto),
+  RouteController.updateRouteStatus
 );
 router.patch(
   "/:id",

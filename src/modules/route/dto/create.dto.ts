@@ -20,7 +20,19 @@ const createRouteDto = z.object({
     street: z.string().max(255),
     zipcode: z.string().max(255),
     details: z.string().max(255).optional()
-  })
+  }),
+  pitstop: z.array(z.object({
+    time: z.string().datetime(),
+    location: z.object({
+      city: z.string().max(255),
+      neighborhood: z.string().max(255),
+      number: z.string().max(255),
+      state: z.string().max(255),
+      street: z.string().max(255),
+      zipcode: z.string().max(255),
+      details: z.string().max(255).optional()
+    }),
+  }))
 });
 
 export { createRouteDto }

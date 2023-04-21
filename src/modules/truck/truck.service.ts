@@ -23,6 +23,14 @@ const getTruck = async (id: string) => {
   const truck = await prisma.truck.findFirst({
     where: {
       id,
+    },
+    include: {
+      routes: {
+        include: {
+          origin: true,
+          destination: true,
+        }
+      },
     }
   })
 

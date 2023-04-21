@@ -11,6 +11,16 @@ const createRoute = async (req: Express.Request, res: Express.Response) => {
   }
 }
 
+const updateRouteStatus = async (req: Express.Request, res: Express.Response) => {
+  try {
+    const response = await RouteService.updateRouteStatus(req.body);
+
+    res.json(response);
+  } catch (error) {
+    throw error;
+  }
+}
+
 const getAllRoute = async (req: Express.Request, res: Express.Response) => {
   try {
     const response = await RouteService.getAllRoutes(Number(req.query.page), Number(req.query.perPage));
@@ -56,5 +66,6 @@ export const RouteController = {
   getRoute,
   updateRoute,
   deleteRoute,
-  getAllRoute
+  getAllRoute,
+  updateRouteStatus
 }

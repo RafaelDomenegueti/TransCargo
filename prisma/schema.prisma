@@ -135,7 +135,7 @@ model Pitstop {
   route_id     String
   routes       Routes    @relation(fields: [route_id], references: [id])
   location_id  String
-  location     Location @relation(fields: [location_id], references: [id])
+  location     Location  @relation(fields: [location_id], references: [id])
   time         DateTime
   created_at   DateTime  @default(now())
   updated_at   DateTime  @updatedAt
