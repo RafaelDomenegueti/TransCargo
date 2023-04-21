@@ -61,11 +61,26 @@ enum LoadsType {
 }
 
 model Loads {
-  id           String    @id @default(uuid())
-  type_loads   LoadsType
-  weight       Float
-  width        Float
-  height       Float
+  id             String    @id @default(uuid())
+  type_loads     LoadsType
+  weight         Float
+  width          Float
+  height         Float
+  origin_id      String
+  origin         Location  @relation(fields: [origin_id], references: [id], name: "loadsOrigin")
+  destination_id String    @unique
+  destination    Location  @relation(fields: [destination_id], references: [id], name: "loadsDestination")
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+  deleted_at     DateTime?
+
+  loadsRoutes LoadsRoutes[]
+
+  @@map("tb_loads")
+}
+
+model Location {
+  id           String  @id @default(uuid())
   city         String
   zipcode      String
   state        String
@@ -73,26 +88,42 @@ model Loads {
   street       String
   number       String
   details      String?
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @updatedAt
-  deleted_at   DateTime?
 
-  routes Routes[]
+  loads_origin       Loads[]  @relation("loadsOrigin")
+  loads_destination  Loads?   @relation("loadsDestination")
+  routes_origin      Routes[]  @relation("routesOrigin")
+  routes_destination Routes?   @relation("routesDestination")
+  pitstop            Pitstop[]
+  statusRoute        StatusRoute[]
 
-  @@map("tb_loads")
+  @@map("tb_location")
+}
+
+model LoadsRoutes {
+  load_id    String
+  load       Loads    @relation(fields: [load_id], references: [id])
+  route_id   String
+  route      Routes   @relation(fields: [route_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@id([load_id, route_id])
 }
 
 model Routes {
-  id         String    @id @default(uuid())
-  truck_id   String
-  truck      Truck     @relation(fields: [truck_id], references: [id])
-  load_id    String
-  load       Loads     @relation(fields: [load_id], references: [id])
-  estimate   Float
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  deleted_at DateTime?
+  id             String    @id @default(uuid())
+  truck_id       String
+  truck          Truck     @relation(fields: [truck_id], references: [id])
+  estimate       Float
+  origin_id      String
+  origin         Location  @relation(fields: [origin_id], references: [id], name: "routesOrigin")
+  destination_id String    @unique
+  destination    Location  @relation(fields: [destination_id], references: [id], name: "routesDestination")
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+  deleted_at     DateTime?
 
+  loadsRoutes LoadsRoutes[]
   pitstop     Pitstop[]
   statusRoute StatusRoute[]
 
@@ -103,13 +134,8 @@ model Pitstop {
   id           String    @id @default(uuid())
   route_id     String
   routes       Routes    @relation(fields: [route_id], references: [id])
-  city         String
-  zipcode      String
-  state        String
-  neighborhood String
-  street       String
-  number       String
-  details      String?
+  location_id  String
+  location     Location @relation(fields: [location_id], references: [id])
   time         DateTime
   created_at   DateTime  @default(now())
   updated_at   DateTime  @updatedAt
@@ -122,16 +148,12 @@ model StatusRoute {
   id           String   @id @default(uuid())
   route_id     String
   routes       Routes   @relation(fields: [route_id], references: [id])
-  city         String
-  zipcode      String
-  state        String
-  neighborhood String
-  street       String
-  number       String
-  details      String?
+  location_id  String
+  location     Location @relation(fields: [location_id], references: [id])
   time         DateTime
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
+  deleted_at   DateTime?
 
   @@map("tb_status_routes")
 }
