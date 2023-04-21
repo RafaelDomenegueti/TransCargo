@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { validate } from "../../middlewares/zod-validator";
-import { TruckController } from "./truck.controller";
-import { createTruckDto } from "./dto/create.dto";
-import { updateTruckDto } from "./dto/update.dto";
+import { LoadController } from "./load.controller";
+import { createLoadDto } from "./dto/create.dto";
+import { updateLoadDto } from "./dto/update.dto";
 import { accessValidator } from "../../middlewares/access-validator";
 import { accessProfileEnum } from "../../enumerators/accessProfile";
 
@@ -11,29 +11,29 @@ const router = Router();
 router.get(
   "/:id",
   accessValidator([accessProfileEnum.ADMINISTRADOR]),
-  TruckController.getTruck
+  LoadController.getLoad
 );
 router.get(
   "/",
   accessValidator([accessProfileEnum.ADMINISTRADOR]),
-  TruckController.getAllTruck
+  LoadController.getAllLoad
 );
 router.post(
   "/",
   accessValidator([accessProfileEnum.ADMINISTRADOR]),
-  validate(createTruckDto),
-  TruckController.createTruck
+  validate(createLoadDto),
+  LoadController.createLoad
 );
 router.patch(
   "/:id",
   accessValidator([accessProfileEnum.ADMINISTRADOR]),
-  validate(updateTruckDto),
-  TruckController.updateTruck
+  validate(updateLoadDto),
+  LoadController.updateLoad
 );
 router.delete(
   "/:id",
   accessValidator([accessProfileEnum.ADMINISTRADOR]),
-  TruckController.deleteTruck
+  LoadController.deleteLoad
 );
 
-export const TruckRoute = { router };
+export const LoadRoute = { router };
