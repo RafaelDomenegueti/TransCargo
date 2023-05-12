@@ -10,7 +10,7 @@ const router = Router();
 
 router.get(
   "/:id",
-  accessValidator([accessProfileEnum.ADMINISTRADOR, accessProfileEnum.MOTORISTA]),
+  accessValidator([accessProfileEnum.ADMINISTRADOR, accessProfileEnum.MOTORISTA, accessProfileEnum.CLIENTE]),
   LoadController.getLoad
 );
 router.get(

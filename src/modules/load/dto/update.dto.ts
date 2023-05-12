@@ -22,7 +22,8 @@ const updateLoadDto = z.object({
     street: z.string().max(255).optional(),
     zipcode: z.string().max(255).optional(),
     details: z.string().max(255).optional()
-  }).optional()
+  }).optional(),
+  customer_id: z.string().uuid().optional()
 });
 
 export { updateLoadDto }

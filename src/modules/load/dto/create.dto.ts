@@ -22,7 +22,8 @@ const createLoadDto = z.object({
     street: z.string().max(255),
     zipcode: z.string().max(255),
     details: z.string().max(255).optional()
-  })
+  }),
+  customer_id: z.string().uuid()
 });
 
 export { createLoadDto }

@@ -2,10 +2,21 @@ import { z } from "zod";
 import { prisma } from "../../prisma/client";
 import { createLoadDto } from "./dto/create.dto";
 import { updateLoadDto } from "./dto/update.dto";
+import { AppError } from "../../errors/AppError";
 
 const createLoad = async (dto: z.infer<typeof createLoadDto>) => {
-  const { destination, height, origin, type_loads, weight, width } = dto;
+  const { destination, height, origin, type_loads, weight, width, customer_id } = dto;
   
+  const customer = prisma.users.findFirst({
+    where: {
+      id: customer_id
+    }
+  })
+
+  if (!customer) {
+    throw AppError('Customer not found')
+  }
+
   const loadCreated = await prisma.loads.create({
     data: {
       origin: {
@@ -33,7 +44,12 @@ const createLoad = async (dto: z.infer<typeof createLoadDto>) => {
       height, 
       weight, 
       width,
-      type_loads
+      type_loads,
+      customer: {
+        connect: {
+          id: customer_id
+        }
+      }
     }
   });
 
@@ -82,8 +98,20 @@ const getAllLoads = async (page: number, perPage: number) => {
 }
 
 const updateLoad = async (dto: z.infer<typeof updateLoadDto>, id: string) => {
-  const { destination, height, origin, type_loads, weight, width } = dto;
+  const { destination, height, origin, type_loads, weight, width, customer_id } = dto;
   
+  if (customer_id) {
+    const customer = prisma.users.findFirst({
+      where: {
+        id: customer_id
+      }
+    })
+  
+    if (!customer) {
+      throw AppError('Customer not found')
+    }
+  }
+
   const loadCreated = await prisma.loads.update({
     where: {
       id,
@@ -114,7 +142,12 @@ const updateLoad = async (dto: z.infer<typeof updateLoadDto>, id: string) => {
       height, 
       type_loads, 
       weight, 
-      width
+      width,
+      customer: {
+        update: {
+          id: customer_id
+        }
+      }
     }
   });
 

@@ -27,6 +27,8 @@ model Users {
   updated_at        DateTime      @updatedAt
   deleted_at        DateTime?
 
+  loads Loads[]
+
   @@map("tb_users")
 }
 
@@ -70,6 +72,8 @@ model Loads {
   origin         Location  @relation(fields: [origin_id], references: [id], name: "loadsOrigin")
   destination_id String    @unique
   destination    Location  @relation(fields: [destination_id], references: [id], name: "loadsDestination")
+  customer_id    String
+  customer       Users     @relation(fields: [customer_id], references: [id])
   created_at     DateTime  @default(now())
   updated_at     DateTime  @updatedAt
   deleted_at     DateTime?
